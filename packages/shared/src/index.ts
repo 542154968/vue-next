@@ -149,6 +149,12 @@ export const toNumber = (val: any): any => {
 }
 
 let _globalThis: any
+/**
+ * 向下兼容 globalThis是es6新出的统一this获取方案 之后是nowindow环境下的self 比如webworker里  之后是window 如果是node环境  就是global
+ * 获取全局this对象 优先级 globalThis > self > window > global > {}
+ * 在non-window上下文的环境中，我们可以使用self来表示全局作用域，注意，只能是光秃秃的self，window.self这样的写法是不行的。
+ * [https://www.cnblogs.com/xy2c/p/7501324.html](了解JS中的全局对象window.self和全局作用域self)
+ */
 export const getGlobalThis = (): any => {
   return (
     _globalThis ||

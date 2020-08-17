@@ -2,6 +2,7 @@ import { setDevtoolsHook } from '@vue/runtime-dom'
 import { getGlobalThis } from '@vue/shared'
 
 export function initDev() {
+  // 获取全局的this
   const target = getGlobalThis()
 
   target.__VUE__ = true
