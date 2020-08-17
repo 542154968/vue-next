@@ -15,26 +15,43 @@ import { InternalRenderFunction } from 'packages/runtime-core/src/component'
 // dev环境初始化
 __DEV__ && initDev()
 
+// 一个纯净的对象
 const compileCache: Record<string, RenderFunction> = Object.create(null)
 
 function compileToFunction(
   template: string | HTMLElement,
   options?: CompilerOptions
 ): RenderFunction {
+  /**
+   * 第一步先判断是不是dom对象  如果是dom对象 就提取出它的innerHTML作为模板
+   */
+  // 如果传进来的是 HTMLElement对象
   if (!isString(template)) {
+    // 如果nodeType存在 即是一个dom对象
     if (template.nodeType) {
+      // template就是它里面的innerHTLM
       template = template.innerHTML
     } else {
+      // 如果传进来的不是dom对象 报错 返回空对象
       __DEV__ && warn(`invalid template option: `, template)
       return NOOP
     }
   }
 
+  /**
+   * 缓存template
+   */
   const key = template
   const cached = compileCache[key]
   if (cached) {
     return cached
   }
+
+  /**
+   * 如果传入的是个id标识  compileToFunction('#app')
+   * 查找这个id标识并获得里面的dom字符串结构
+   * 如果 没找到这个id标识  返回的template是空的
+   * */
 
   if (template[0] === '#') {
     const el = document.querySelector(template)
@@ -42,9 +59,13 @@ function compileToFunction(
       warn(`Template element not found or is empty: ${template}`)
     }
     // __UNSAFE__
+    //不安全__
     // Reason: potential execution of JS expressions in in-DOM template.
+    //原因：可能会在in-DOM模板中执行JS表达式。
     // The user must make sure the in-DOM template is trusted. If it's rendered
+    //用户必须确保in-DOM模板是可信的。如果它被渲染
     // by the server, the template should not contain any user data.
+    //对于服务器，模板不应包含任何用户数据。
     template = el ? el.innerHTML : ``
   }
 
