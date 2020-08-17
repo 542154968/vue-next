@@ -12,6 +12,7 @@ import { InternalRenderFunction } from 'packages/runtime-core/src/component'
 // __DEV__ 定义在了 rollup.config.js中209行 同时 global.d.ts中定义了它的类型
 // 返回的是一个布尔类型的值 判断是否是dev环境
 // h含有bundler 和 browser两种类型作为判断
+// dev环境初始化
 __DEV__ && initDev()
 
 const compileCache: Record<string, RenderFunction> = Object.create(null)
