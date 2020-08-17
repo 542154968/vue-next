@@ -1,3 +1,5 @@
+# 仓库在https://github.com/loeffel-io/ls-lint
+# 功能是校验项目文件名
 ls:
   packages/*/{src,__tests__}:
     .js: kebab-case
