@@ -36,6 +36,11 @@ import { isString, isObject, hyphenate, extend } from '@vue/shared'
 export const isStaticExp = (p: JSChildNode): p is SimpleExpressionNode =>
   p.type === NodeTypes.SIMPLE_EXPRESSION && p.isStatic
 
+/**
+ * 判断tag是否相同 如果不同会转成-名字判断一下 返回最终是否相同
+ * @param tag
+ * @param expected
+ */
 export const isBuiltInType = (tag: string, expected: string): boolean =>
   tag === expected || tag === hyphenate(expected)
 

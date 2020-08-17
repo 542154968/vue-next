@@ -23,12 +23,20 @@ export const enum DOMNamespaces {
 }
 
 export const parserOptions: ParserOptions = {
+  //   'area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr' 判断是否是这些标签 是否是自闭和标签
   isVoidTag,
+  // 是否是html和svg的标签
   isNativeTag: tag => isHTMLTag(tag) || isSVGTag(tag),
+  // 是否是pre标签
   isPreTag: tag => tag === 'pre',
+  // 如果是浏览器环境 获得传入的 node.textContent内容
+  // 不是就返回转成ast语法树的结果
   decodeEntities: __BROWSER__ ? decodeHtmlBrowser : decodeHtml,
 
+  // 判断标签 如果是trantion相关的返回 symbol唯一值
   isBuiltInComponent: (tag: string): symbol | undefined => {
+    // 判断是否是transiton 和 transitiongroup标签
+    // 返回一个symbol唯一值的标签名
     if (isBuiltInType(tag, `Transition`)) {
       return TRANSITION
     } else if (isBuiltInType(tag, `TransitionGroup`)) {
@@ -36,6 +44,7 @@ export const parserOptions: ParserOptions = {
     }
   },
 
+  // 命名空间
   // https://html.spec.whatwg.org/multipage/parsing.html#tree-construction-dispatcher
   getNamespace(tag: string, parent: ElementNode | undefined): DOMNamespaces {
     let ns = parent ? parent.ns : DOMNamespaces.HTML
@@ -85,6 +94,7 @@ export const parserOptions: ParserOptions = {
     return ns
   },
 
+  //
   // https://html.spec.whatwg.org/multipage/parsing.html#parsing-html-fragments
   getTextMode({ tag, ns }: ElementNode): TextModes {
     if (ns === DOMNamespaces.HTML) {
